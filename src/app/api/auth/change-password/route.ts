@@ -6,17 +6,23 @@ import { verifyToken } from "@/lib/jwt";
 
 export async function POST(request: NextRequest) {
   try {
-    // 验证管理员身份
+    // 验证管理员身份 - 强制从 cookie 中获取认证令牌
     const cookieStore = await cookies();
     const token = cookieStore.get("auth-token")?.value;
 
     if (!token) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
+      return NextResponse.json(
+        { error: "未登录，请重新登录" },
+        { status: 401 }
+      );
     }
 
     const admin = verifyToken(token);
     if (!admin) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
+      return NextResponse.json(
+        { error: "登录已过期，请重新登录" },
+        { status: 401 }
+      );
     }
 
     const { currentPassword, newPassword, confirmPassword } =

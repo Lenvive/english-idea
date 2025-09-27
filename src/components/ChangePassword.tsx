@@ -37,6 +37,7 @@ export default function ChangePassword({ onClose }: ChangePasswordProps) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // 确保包含 cookies
         body: JSON.stringify(formData),
       });
 

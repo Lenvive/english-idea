@@ -28,7 +28,9 @@ export default function Admin() {
 
   const fetchSentences = async () => {
     try {
-      const response = await fetch("/api/sentences");
+      const response = await fetch("/api/sentences", {
+        credentials: "include",
+      });
       if (response.ok) {
         const data = await response.json();
         setSentences(data);
@@ -44,7 +46,10 @@ export default function Admin() {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
       router.push("/");
     } catch (error) {
       console.error("登出失败:", error);
@@ -62,6 +67,7 @@ export default function Admin() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ content: newSentence.trim() }),
       });
 
@@ -88,6 +94,7 @@ export default function Admin() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ content: editingContent.trim() }),
       });
 
@@ -111,6 +118,7 @@ export default function Admin() {
     try {
       const response = await fetch(`/api/sentences/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (response.ok) {

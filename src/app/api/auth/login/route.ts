@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signToken } from "@/lib/jwt";
+import { getCookieConfig } from "@/lib/cookie-config";
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,12 +39,10 @@ export async function POST(request: NextRequest) {
 
     // 设置cookie
     const response = NextResponse.json({ success: true });
-    response.cookies.set("auth-token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 7, // 7天
-    });
+
+    const cookieConfig = getCookieConfig(request, 60 * 60 * 24 * 7); // 7天
+
+    response.cookies.set("auth-token", token, cookieConfig);
 
     return response;
   } catch (error) {
