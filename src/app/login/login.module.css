@@ -1,0 +1,73 @@
+.loginContainer {
+  max-width: 400px;
+  margin: var(--space-xxl) auto;
+  padding: 0 var(--space-md);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--color-black);
+  margin-bottom: var(--space-md);
+}
+
+.backLink {
+  display: inline-block;
+  color: var(--color-dark-gray);
+  font-size: 0.9rem;
+  transition: color var(--transition-medium);
+}
+
+.backLink:hover {
+  color: var(--color-charcoal);
+}
+
+.main {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-medium-gray);
+  padding: var(--space-lg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--color-charcoal);
+  font-weight: 500;
+}
+
+.error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: var(--space-sm);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .loginContainer {
+    margin: var(--space-lg) auto;
+    padding: 0 var(--space-sm);
+  }
+
+  .main {
+    padding: var(--space-md);
+  }
+}
