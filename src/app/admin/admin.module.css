@@ -31,6 +31,12 @@
   margin-bottom: var(--space-xl);
 }
 
+.headerActions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: 300;
@@ -131,6 +137,11 @@
     gap: var(--space-sm);
   }
 
+  .headerActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   .main {
     gap: var(--space-lg);
   }
@@ -153,5 +164,17 @@
 
   .editActions .btn {
     justify-self: stretch;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .headerActions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }

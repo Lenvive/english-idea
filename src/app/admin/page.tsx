@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ChangePassword from "@/components/ChangePassword";
 import styles from "./admin.module.css";
 
 interface Sentence {
@@ -18,6 +19,7 @@ export default function Admin() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingContent, setEditingContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -146,9 +148,17 @@ export default function Admin() {
     <div className="container">
       <header className={styles.header}>
         <h1 className={styles.title}>管理界面</h1>
-        <button onClick={handleLogout} className="btn btn-minimal">
-          退出登录
-        </button>
+        <div className={styles.headerActions}>
+          <button
+            onClick={() => setShowChangePassword(true)}
+            className="btn btn-secondary"
+          >
+            修改密码
+          </button>
+          <button onClick={handleLogout} className="btn btn-minimal">
+            退出登录
+          </button>
+        </div>
       </header>
 
       <main className={styles.main}>
@@ -243,6 +253,10 @@ export default function Admin() {
           )}
         </section>
       </main>
+
+      {showChangePassword && (
+        <ChangePassword onClose={() => setShowChangePassword(false)} />
+      )}
     </div>
   );
 }
