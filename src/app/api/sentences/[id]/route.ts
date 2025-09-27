@@ -18,7 +18,7 @@ async function verifyAdmin() {
 // 更新语句
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const admin = await verifyAdmin();
@@ -28,7 +28,8 @@ export async function PUT(
     }
 
     const { content } = await request.json();
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
 
     if (!content || content.trim() === "") {
       return NextResponse.json({ error: "语句内容不能为空" }, { status: 400 });
@@ -49,7 +50,7 @@ export async function PUT(
 // 删除语句
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const admin = await verifyAdmin();
@@ -58,7 +59,8 @@ export async function DELETE(
       return NextResponse.json({ error: "未授权" }, { status: 401 });
     }
 
-    const id = parseInt(params.id);
+    const { id: idParam } = await params;
+    const id = parseInt(idParam);
 
     await prisma.sentence.delete({
       where: { id },
