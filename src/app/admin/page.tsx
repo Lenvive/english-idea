@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { apiService } from "@/lib/api";
 import ChangePassword from "@/components/ChangePassword";
 import styles from "./admin.module.css";
@@ -21,7 +21,7 @@ export default function Admin() {
   const [editingContent, setEditingContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
-  const router = useRouter();
+  const router = useAppRouter();
 
   useEffect(() => {
     fetchSentences();
@@ -34,7 +34,7 @@ export default function Admin() {
     } catch (error: any) {
       console.error("获取语句失败:", error);
       if (error.response?.status === 401) {
-        router.push("/login");
+        router.goToLogin();
       }
     } finally {
       setLoading(false);
@@ -44,7 +44,7 @@ export default function Admin() {
   const handleLogout = async () => {
     try {
       await apiService.auth.logout();
-      router.push("/");
+      router.goToHome();
     } catch (error) {
       console.error("登出失败:", error);
     }
@@ -62,7 +62,7 @@ export default function Admin() {
     } catch (error: any) {
       console.error("添加语句失败:", error);
       if (error.response?.status === 401) {
-        router.push("/login");
+        router.goToLogin();
       }
     } finally {
       setIsSubmitting(false);
@@ -81,7 +81,7 @@ export default function Admin() {
     } catch (error: any) {
       console.error("编辑语句失败:", error);
       if (error.response?.status === 401) {
-        router.push("/login");
+        router.goToLogin();
       }
     } finally {
       setIsSubmitting(false);
@@ -97,7 +97,7 @@ export default function Admin() {
     } catch (error: any) {
       console.error("删除语句失败:", error);
       if (error.response?.status === 401) {
-        router.push("/login");
+        router.goToLogin();
       }
     }
   };

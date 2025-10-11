@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { AppLink } from "@/components/AppLink";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { apiService } from "@/lib/api";
+import { APP_CONFIG } from "@/lib/config";
 import styles from "./login.module.css";
 
 export default function Login() {
@@ -13,7 +14,7 @@ export default function Login() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,7 +31,7 @@ export default function Login() {
 
     try {
       await apiService.auth.login(formData);
-      router.push("/admin");
+      router.goToAdmin();
     } catch (error: any) {
       setError(error.response?.data?.error || "登录失败");
     } finally {
@@ -43,9 +44,9 @@ export default function Login() {
       <div className={styles.loginContainer}>
         <header className={styles.header}>
           <h1 className={styles.title}>管理员登录</h1>
-          <Link href="/" className={styles.backLink}>
+          <AppLink href={APP_CONFIG.routes.home} className={styles.backLink}>
             ← 返回首页
-          </Link>
+          </AppLink>
         </header>
 
         <main className={styles.main}>

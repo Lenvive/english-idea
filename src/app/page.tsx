@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { AppLink } from "@/components/AppLink";
 import { apiService } from "@/lib/api";
+import { APP_CONFIG } from "@/lib/config";
 import styles from "./page.module.css";
 
 interface Sentence {
@@ -47,9 +48,9 @@ export default function Home() {
       <header className={styles.header}>
         <h1 className={styles.title}>English Ideas</h1>
         <p className={styles.subtitle}>时不时想出的英语语句</p>
-        <Link href="/login" className="btn btn-minimal">
+        <AppLink href={APP_CONFIG.routes.login} className="btn btn-minimal">
           我是管理员
-        </Link>
+        </AppLink>
       </header>
 
       <main className={styles.main}>

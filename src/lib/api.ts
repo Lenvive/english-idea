@@ -1,15 +1,5 @@
 import axios from "axios";
-
-// 获取正确的 API 基础路径
-const getApiBaseUrl = () => {
-  if (typeof window !== "undefined") {
-    // 客户端：使用当前页面的 origin 加上 basePath
-    return `${window.location.origin}/english-ideas/api`;
-  } else {
-    // 服务器端：只返回路径
-    return "/english-ideas/api";
-  }
-};
+import { getApiBaseUrl, APP_CONFIG } from "@/lib/config";
 
 // 创建 axios 实例
 const api = axios.create({
@@ -40,7 +30,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // 如果是浏览器环境
       if (typeof window !== "undefined") {
-        window.location.href = "/english-ideas/login";
+        window.location.href = `${APP_CONFIG.basePath}${APP_CONFIG.routes.login}`;
       }
     }
     return Promise.reject(error);
