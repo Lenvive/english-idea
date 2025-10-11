@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { apiService } from "@/lib/api";
 import styles from "./ChangePassword.module.css";
 
 interface ChangePasswordProps {
@@ -32,27 +33,13 @@ export default function ChangePassword({ onClose }: ChangePasswordProps) {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // 确保包含 cookies
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSuccess(true);
-        setTimeout(() => {
-          onClose();
-        }, 2000);
-      } else {
-        setError(data.error || "修改密码失败");
-      }
-    } catch (error) {
-      setError("网络错误，请重试");
+      await apiService.auth.changePassword(formData);
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (error: any) {
+      setError(error.response?.data?.error || "修改密码失败");
     } finally {
       setLoading(false);
     }

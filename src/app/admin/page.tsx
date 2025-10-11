@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { apiService } from "@/lib/api";
 import ChangePassword from "@/components/ChangePassword";
 import styles from "./admin.module.css";
 
@@ -28,17 +29,13 @@ export default function Admin() {
 
   const fetchSentences = async () => {
     try {
-      const response = await fetch("/api/sentences", {
-        credentials: "include",
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setSentences(data);
-      } else if (response.status === 401) {
+      const response = await apiService.sentences.getAll();
+      setSentences(response.data);
+    } catch (error: any) {
+      console.error("获取语句失败:", error);
+      if (error.response?.status === 401) {
         router.push("/login");
       }
-    } catch (error) {
-      console.error("获取语句失败:", error);
     } finally {
       setLoading(false);
     }
@@ -46,10 +43,7 @@ export default function Admin() {
 
   const handleLogout = async () => {
     try {
-      await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      await apiService.auth.logout();
       router.push("/");
     } catch (error) {
       console.error("登出失败:", error);
@@ -62,23 +56,14 @@ export default function Admin() {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/sentences", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ content: newSentence.trim() }),
-      });
-
-      if (response.ok) {
-        setNewSentence("");
-        fetchSentences();
-      } else if (response.status === 401) {
+      await apiService.sentences.create(newSentence.trim());
+      setNewSentence("");
+      fetchSentences();
+    } catch (error: any) {
+      console.error("添加语句失败:", error);
+      if (error.response?.status === 401) {
         router.push("/login");
       }
-    } catch (error) {
-      console.error("添加语句失败:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -89,24 +74,15 @@ export default function Admin() {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(`/api/sentences/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ content: editingContent.trim() }),
-      });
-
-      if (response.ok) {
-        setEditingId(null);
-        setEditingContent("");
-        fetchSentences();
-      } else if (response.status === 401) {
+      await apiService.sentences.update(id, editingContent.trim());
+      setEditingId(null);
+      setEditingContent("");
+      fetchSentences();
+    } catch (error: any) {
+      console.error("编辑语句失败:", error);
+      if (error.response?.status === 401) {
         router.push("/login");
       }
-    } catch (error) {
-      console.error("编辑语句失败:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -116,18 +92,13 @@ export default function Admin() {
     if (!confirm("确定要删除这条语句吗？")) return;
 
     try {
-      const response = await fetch(`/api/sentences/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        fetchSentences();
-      } else if (response.status === 401) {
+      await apiService.sentences.delete(id);
+      fetchSentences();
+    } catch (error: any) {
+      console.error("删除语句失败:", error);
+      if (error.response?.status === 401) {
         router.push("/login");
       }
-    } catch (error) {
-      console.error("删除语句失败:", error);
     }
   };
 

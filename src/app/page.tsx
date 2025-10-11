@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { apiService } from "@/lib/api";
 import styles from "./page.module.css";
 
 interface Sentence {
@@ -21,11 +22,8 @@ export default function Home() {
 
   const fetchSentences = async () => {
     try {
-      const response = await fetch("/api/sentences");
-      if (response.ok) {
-        const data = await response.json();
-        setSentences(data);
-      }
+      const response = await apiService.sentences.getAll();
+      setSentences(response.data);
     } catch (error) {
       console.error("获取语句失败:", error);
     } finally {

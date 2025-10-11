@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { apiService } from "@/lib/api";
 import styles from "./login.module.css";
 
 export default function Login() {
@@ -28,23 +29,10 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        router.push("/admin");
-      } else {
-        const data = await response.json();
-        setError(data.error || "登录失败");
-      }
-    } catch (error) {
-      setError("网络错误，请重试");
+      await apiService.auth.login(formData);
+      router.push("/admin");
+    } catch (error: any) {
+      setError(error.response?.data?.error || "登录失败");
     } finally {
       setLoading(false);
     }
